@@ -134,6 +134,7 @@ INSERT INTO G19.users(userId, birthdate, gender, zip, occupation)
 SELECT userId, birthdate, gender, zip, occupation
 FROM fcp_2022.ratings_csv;
 
+#Going to be the same issue here with movieId
 INSERT INTO G19.movies(movieId, title, yearReleased, imbId, tmbId)
 SELECT movieId, title, yearReleased, imdbId, tmdbId
 FROM  fcp_2022.ratings_csv;
