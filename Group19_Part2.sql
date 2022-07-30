@@ -99,9 +99,9 @@ SELECT movieId, genreId
 FROM G19.genres, G19.movies; 
 
 
-#IN ORDER OF POPULATION
+#IN ORDER OF POPULATION-----------------------------------------------------------
 
-INSERT INTO G19.tags
+INSERT INTO G19.tags(tagId, tag)
 SELECT tagId, tag
 FROM fcp_2022.`genome-scores_csv`;
 
@@ -128,27 +128,27 @@ SELECT DISTINCT(genre6) FROM (SELECT Substring_Index(substring_index(genres, '|'
 UNION
 SELECT DISTINCT(genre7) FROM (SELECT Substring_Index(substring_index(genres, '|',7), '|', -1) as genre7 FROM fcp_2022.tagged_csv ) as split7) as split_genres;
 
-INSERT INTO G19.users
-SELECT UserId, birthdate, gender, zip, occupation
+INSERT INTO G19.users(userId, birthdate, gender, zip, occupation)
+SELECT userId, birthdate, gender, zip, occupation
 FROM fcp_2022.ratings_csv;
 
-INSERT INTO G19.movies
+INSERT INTO G19.movies(movieId, title, yearReleased, imbId, tmbId)
 SELECT movieId, title, yearReleased, imdbId, tmdbId
 FROM  fcp_2022.ratings_csv;
 
-INSERT INTO G19.movie_genre
+INSERT INTO G19.movie_genre(movieId, genreId)
 SELECT movieId, genreId
 FROM G19.genres, G19.movies; 
 
-INSERT INTO G19.movie_genome
+INSERT INTO G19.movie_genome(movieId, tagId, relevance)
 SELECT movieID, tagId, relevance
 FROM fcp_2022.`genome-scores_csv`;
 
-INSERT INTO G19.tagged
+INSERT INTO G19.tagged(userId, tagId, movieId, timestamp)
 SELECT T.userId, GS.tagId, T.movieId, T.timestamp
 FROM fcp_2022.tagged_csv T
 JOIN fcp_2022.`genome-scores_csv` GS ON T.movieId = GS.movieId;
 
-INSERT INTO G19.ratings
+INSERT INTO G19.ratings(userId, movieId, rating, timestamp)
 SELECT userId, movieId, rating, timestamp
 FROM fcp_2022.ratings_csv;
