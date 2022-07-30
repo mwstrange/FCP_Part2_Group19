@@ -106,7 +106,7 @@ INSERT INTO G19.tags(tagId, tag)
 SELECT tagId, tag
 FROM fcp_2022.`genome-scores_csv`;  */
 
-# The tagID is set to AutoIncrement so there may be an issue trying to insert
+# The tagID is set to AutoIncrement so we only need to select the distinct tag from the tagged csv
 INSERT INTO G19.tags (tag)
 SELECT DISTINCT(tag) FROM fcp_2022.tagged_csv;
 
