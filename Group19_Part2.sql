@@ -129,10 +129,14 @@ SELECT DISTINCT(genre6) FROM (SELECT Substring_Index(substring_index(genres, '|'
 UNION
 SELECT DISTINCT(genre7) FROM (SELECT Substring_Index(substring_index(genres, '|',7), '|', -1) as genre7 FROM fcp_2022.tagged_csv ) as split7) as split_genres;
 
-# users also doesnt work, tried to delete the userId portion from the INSERT INTO and SELECT lines but this appears to be creating multiple UserIDs for the same individual. I think we need to group before insertion.
-INSERT INTO G19.users(userId, birthdate, gender, zip, occupation)
-SELECT userId, birthdate, gender, zip, occupation
-FROM fcp_2022.ratings_csv;
+# Using a subquery to get each distinct user and then importing that into the table.
+INSERT INTO G19.users(birthdate, gender, zip, occupation)
+SELECT 
+	birthdate, gender, zip, occupation
+FROM 
+	(SELECT userId, birthdate, gender, zip, occupation
+	 FROM fcp_2022.ratings_csv
+     GROUP BY userId, birthdate, gender, zip, occupation) as users;
 
 #Going to be the same issue here with movieId
 INSERT INTO G19.movies(movieId, title, yearReleased, imbId, tmbId)
