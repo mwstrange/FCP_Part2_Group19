@@ -109,6 +109,25 @@ INSERT INTO G19.genres
 SELECT concat (movieId, genres) as genreId, genres
 FROM fcp_2022.ratings_csv;
 
+/*
+This will split each genre field by '|', stack them into a column and insert into genres table with auto increment ID
+*/
+INSERT INTO G19.genres(genre)
+SELECT * FROM (
+SELECT DISTINCT(genre1) FROM (SELECT Substring_Index(substring_index(genres, '|',1), '|', -1) as genre1 FROM fcp_2022.tagged_csv ) as split1
+UNION
+SELECT DISTINCT(genre2) FROM (SELECT Substring_Index(substring_index(genres, '|',2), '|', -1) as genre2 FROM fcp_2022.tagged_csv ) as split2
+UNION
+SELECT DISTINCT(genre3) FROM (SELECT Substring_Index(substring_index(genres, '|',3), '|', -1) as genre3 FROM fcp_2022.tagged_csv ) as split3
+UNION
+SELECT DISTINCT(genre4) FROM (SELECT Substring_Index(substring_index(genres, '|',4), '|', -1) as genre4 FROM fcp_2022.tagged_csv ) as split4
+UNION
+SELECT DISTINCT(genre5) FROM (SELECT Substring_Index(substring_index(genres, '|',5), '|', -1) as genre5 FROM fcp_2022.tagged_csv ) as split5
+UNION
+SELECT DISTINCT(genre6) FROM (SELECT Substring_Index(substring_index(genres, '|',6), '|', -1) as genre6 FROM fcp_2022.tagged_csv ) as split6
+UNION
+SELECT DISTINCT(genre7) FROM (SELECT Substring_Index(substring_index(genres, '|',7), '|', -1) as genre7 FROM fcp_2022.tagged_csv ) as split7) as split_genres
+
 INSERT INTO G19.users
 SELECT UserId, birthdate, gender, zip, occupation
 FROM fcp_2022.ratings_csv;
