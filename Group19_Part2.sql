@@ -109,10 +109,6 @@ FROM fcp_2022.`genome-scores_csv`;
 INSERT INTO G19.tags (tag)
 SELECT DISTINCT(tag) FROM fcp_2022.tagged_csv;
 
-INSERT INTO G19.genres
-SELECT concat (movieId, genres) as genreId, genres
-FROM fcp_2022.ratings_csv;
-
 /*
 This will split each genre field by '|', stack them into a column and insert into genres table with auto increment ID
 */
