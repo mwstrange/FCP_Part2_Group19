@@ -105,6 +105,10 @@ INSERT INTO G19.tags
 SELECT tagId, tag
 FROM fcp_2022.`genome-scores_csv`;
 
+# The tagID is set to AutoIncrement so there may be an issue trying to insert
+INSERT INTO G19.tags (tag)
+SELECT DISTINCT(tag) FROM fcp_2022.tagged_csv;
+
 INSERT INTO G19.genres
 SELECT concat (movieId, genres) as genreId, genres
 FROM fcp_2022.ratings_csv;
@@ -126,7 +130,7 @@ SELECT DISTINCT(genre5) FROM (SELECT Substring_Index(substring_index(genres, '|'
 UNION
 SELECT DISTINCT(genre6) FROM (SELECT Substring_Index(substring_index(genres, '|',6), '|', -1) as genre6 FROM fcp_2022.tagged_csv ) as split6
 UNION
-SELECT DISTINCT(genre7) FROM (SELECT Substring_Index(substring_index(genres, '|',7), '|', -1) as genre7 FROM fcp_2022.tagged_csv ) as split7) as split_genres
+SELECT DISTINCT(genre7) FROM (SELECT Substring_Index(substring_index(genres, '|',7), '|', -1) as genre7 FROM fcp_2022.tagged_csv ) as split7) as split_genres;
 
 INSERT INTO G19.users
 SELECT UserId, birthdate, gender, zip, occupation
