@@ -99,7 +99,7 @@ SELECT movieId, genreId
 FROM G19.genres, G19.movies; 
 
 
-#Population_Order but still need to update the Genres sections
+#IN ORDER OF POPULATION
 
 INSERT INTO G19.tags
 SELECT tagId, tag
