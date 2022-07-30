@@ -99,7 +99,7 @@ SELECT movieId, genreId
 FROM G19.genres, G19.movies; 
 
 
-#IN ORDER OF POPULATION-----------------------------------------------------------
+#IN ORDER OF DATABASE POPULATION-----------------------------------------------------------
 
 INSERT INTO G19.tags(tagId, tag)
 SELECT tagId, tag
