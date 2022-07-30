@@ -129,7 +129,7 @@ SELECT DISTINCT(genre6) FROM (SELECT Substring_Index(substring_index(genres, '|'
 UNION
 SELECT DISTINCT(genre7) FROM (SELECT Substring_Index(substring_index(genres, '|',7), '|', -1) as genre7 FROM fcp_2022.tagged_csv ) as split7) as split_genres;
 
-# users also doesnt work, tried to delete the userId portion from the INSERT INTO and SELECT lines but this appears to be creating a UserID for the same individual. I think we need to group before insertion.
+# users also doesnt work, tried to delete the userId portion from the INSERT INTO and SELECT lines but this appears to be creating multiple UserIDs for the same individual. I think we need to group before insertion.
 INSERT INTO G19.users(userId, birthdate, gender, zip, occupation)
 SELECT userId, birthdate, gender, zip, occupation
 FROM fcp_2022.ratings_csv;
