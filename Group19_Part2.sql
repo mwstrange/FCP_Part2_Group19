@@ -101,9 +101,10 @@ FROM G19.genres, G19.movies;
 
 #IN ORDER OF DATABASE POPULATION-----------------------------------------------------------
 
+/* Doesnt work
 INSERT INTO G19.tags(tagId, tag)
 SELECT tagId, tag
-FROM fcp_2022.`genome-scores_csv`;
+FROM fcp_2022.`genome-scores_csv`;  */
 
 # The tagID is set to AutoIncrement so there may be an issue trying to insert
 INSERT INTO G19.tags (tag)
