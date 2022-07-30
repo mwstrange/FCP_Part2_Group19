@@ -97,3 +97,39 @@ FROM fcp_2022.ratings_csv;
 INSERT INTO G19.movie_genre
 SELECT movieId, genreId
 FROM G19.genres, G19.movies; 
+
+
+#Population_Order but still need to update the Genres sections
+
+INSERT INTO G19.tags
+SELECT tagId, tag
+FROM fcp_2022.`genome-scores_csv`;
+
+INSERT INTO G19.genres
+SELECT concat (movieId, genres) as genreId, genres
+FROM fcp_2022.ratings_csv;
+
+INSERT INTO G19.users
+SELECT UserId, birthdate, gender, zip, occupation
+FROM fcp_2022.ratings_csv;
+
+INSERT INTO G19.movies
+SELECT movieId, title, yearReleased, imdbId, tmdbId
+FROM  fcp_2022.ratings_csv;
+
+INSERT INTO G19.movie_genre
+SELECT movieId, genreId
+FROM G19.genres, G19.movies; 
+
+INSERT INTO G19.movie_genome
+SELECT movieID, tagId, relevance
+FROM fcp_2022.`genome-scores_csv`;
+
+INSERT INTO G19.tagged
+SELECT T.userId, GS.tagId, T.movieId, T.timestamp
+FROM fcp_2022.tagged_csv T
+JOIN fcp_2022.`genome-scores_csv` GS ON T.movieId = GS.movieId;
+
+INSERT INTO G19.ratings
+SELECT userId, movieId, rating, timestamp
+FROM fcp_2022.ratings_csv;
