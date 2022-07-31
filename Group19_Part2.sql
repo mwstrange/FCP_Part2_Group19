@@ -121,6 +121,8 @@ SELECT T.userId, GS.tagId, T.movieId, T.timestamp
 FROM fcp_2022.tagged_csv T
 JOIN fcp_2022.`genome-scores_csv` GS ON T.movieId = GS.movieId;
 
-INSERT INTO G19.ratings(userId, movieId, rating, timestamp)
-SELECT userId, movieId, rating, timestamp
-FROM fcp_2022.ratings_csv;
+INSERT INTO G19.ratings(userId, movieId, rating, timestamp)     
+SELECT u.userId, m.movieId, r.rating, r.timestamp
+FROM fcp_2022.ratings_csv r 
+	 JOIN G19.users u ON r.userId = u.userId
+     	 JOIN G19.movies m ON r.movieId = m.movieId
