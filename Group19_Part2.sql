@@ -101,12 +101,17 @@ FROM
      	 GROUP BY userId, birthdate, gender, zip, occupation) as users;
 
 # Using a subquery to get each distinct movie and then importing that into the table.
-INSERT INTO G19.movies(title, yearReleased, imdbid, tmdbid)
-SELECT 
-	title, yearReleased, imdbId, tmdbId
-FROM  
-	(SELECT DISTINCT(movieId), title, yearReleased, imdbId, tmdbId
-	 FROM fcp_2022.ratings_csv) as movies;
+#INSERT INTO G19.movies(title, yearReleased, imdbid, tmdbid)
+#SELECT 
+#	title, yearReleased, imdbId, tmdbId
+#FROM  
+#	(SELECT DISTINCT(movieId), title, yearReleased, imdbId, tmdbId
+#	 FROM fcp_2022.ratings_csv) as movies;
+
+INSERT INTO G19.movies
+SELECT Distinct(g.movieId), g.title, g.yearReleased, r.imdbId, r.tmdbID
+FROM fcp_2022.`genome-scores_csv` as g
+LEFT JOIN fcp_2022.ratings_csv as r USING (movieID)
 
 INSERT INTO G19.movie_genre(movieId, genreId)
 SELECT movieId, genreId
