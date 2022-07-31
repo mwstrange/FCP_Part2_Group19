@@ -122,10 +122,17 @@ SELECT g.movieId, t.tagID, g.relevance
 FROM `fcp_2022`.`genome-scores_csv` as g
 JOIN G19.tags as t ON g.tag = t.tag;
 
+/*
 INSERT INTO G19.tagged(userId, tagId, movieId, timestamp)
 SELECT T.userId, GS.tagId, T.movieId, T.timestamp
 FROM fcp_2022.tagged_csv T
-JOIN fcp_2022.`genome-scores_csv` GS ON T.movieId = GS.movieId;
+JOIN fcp_2022.`genome-scores_csv` GS ON T.movieId = GS.movieId; */
+
+INSERT INTO G19.tagged(userId, tagId, movieId, timestamp)
+SELECT T.userId, t2.tagId, T.movieId, T.timestamp
+FROM fcp_2022.tagged_csv T
+JOIN G19.tags as t2 ON t2.tag = T.tag;
+
 
 INSERT INTO G19.ratings(userId, movieId, rating, timestamp)     
 SELECT u.userId, m.movieId, r.rating, r.timestamp
