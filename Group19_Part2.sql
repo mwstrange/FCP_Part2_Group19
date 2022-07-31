@@ -9,7 +9,7 @@ CREATE TABLE G19.genres(
     PRIMARY KEY (genreID));
 
 CREATE TABLE G19.users(
-	userId INT AUTO_INCREMENT NOT NULL,
+	userId INT UNIQUE NOT NULL,
     birthdate DATE,
     gender CHAR(1),
     zip CHAR(5),
@@ -17,7 +17,7 @@ CREATE TABLE G19.users(
     PRIMARY KEY (userID));
 
 CREATE TABLE G19.movies(
-	movieId INT AUTO_INCREMENT NOT NULL,
+	movieId INT UNIQUE NOT NULL,
     title VARCHAR(83),
     yearReleased YEAR,
     imdbid CHAR(7),
