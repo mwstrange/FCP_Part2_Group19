@@ -101,38 +101,50 @@ FROM
      	 GROUP BY userId, birthdate, gender, zip, occupation) as users;
 
 # Using a subquery to get each distinct movie and then importing that into the table.
-#INSERT INTO G19.movies(title, yearReleased, imdbid, tmdbid)
-#SELECT 
-#	title, yearReleased, imdbId, tmdbId
-#FROM  
-#	(SELECT DISTINCT(movieId), title, yearReleased, imdbId, tmdbId
-#	 FROM fcp_2022.ratings_csv) as movies;
+INSERT INTO G19.movies(movieId, title, yearReleased, imdbid, tmdbid)
+SELECT DISTINCT(movieId), title, yearReleased, imdbId, tmdbId
+FROM fcp_2022.ratings_csv;
 
-INSERT INTO G19.movies
-SELECT Distinct(g.movieId), g.title, g.yearReleased, r.imdbId, r.tmdbID
-FROM fcp_2022.`genome-scores_csv` as g
-LEFT JOIN fcp_2022.ratings_csv as r USING (movieID)
+---------------------------------------------
 
-INSERT INTO G19.movie_genre(movieId, genreId)
-SELECT movieId, genreId
-FROM G19.genres, G19.movies; 
+#each movie can have more than one genre so we split out to make sure we caught every genre for each movie in the tagged file. 
+INSERT INTO G19.movie_genre (movieId, genreId)	
+SELECT sg.movieId, g.genreId 
+FROM 
+(
+	SELECT movieId, genre1 
+	FROM (SELECT Substring_Index(substring_index(genres, '|',1), '|', -1) as genre1, movieId FROM fcp_2022.tagged_csv) as split1
+UNION
+	SELECT movieId, genre2 
+    FROM (SELECT Substring_Index(substring_index(genres, '|',2), '|', -1) as genre2, movieId FROM fcp_2022.tagged_csv) as split2
+UNION
+	SELECT movieId, genre3 
+    FROM (SELECT Substring_Index(substring_index(genres, '|',3), '|', -1) as genre3, movieId FROM fcp_2022.tagged_csv ) as split3
+UNION
+	SELECT movieId, genre4 
+    FROM (SELECT Substring_Index(substring_index(genres, '|',4), '|', -1) as genre4, movieId FROM fcp_2022.tagged_csv ) as split4
+UNION
+	SELECT movieId, genre5 
+    FROM (SELECT Substring_Index(substring_index(genres, '|',5), '|', -1) as genre5, movieId FROM fcp_2022.tagged_csv ) as split5
+UNION
+	SELECT movieId, genre6 
+    FROM (SELECT Substring_Index(substring_index(genres, '|',6), '|', -1) as genre6, movieId FROM fcp_2022.tagged_csv ) as split6
+UNION
+	SELECT movieId, genre7 
+    FROM (SELECT Substring_Index(substring_index(genres, '|',7), '|', -1) as genre7, movieId FROM fcp_2022.tagged_csv ) as split7) as sg 
+    JOIN G19.genres g ON sg.genre1 = g.genre;
+
+-----------------------------------------------------------    
 
 INSERT INTO G19.movie_genome (movieId, tagId, relevance)
 SELECT g.movieId, t.tagID, g.relevance
 FROM `fcp_2022`.`genome-scores_csv` as g
 JOIN G19.tags as t ON g.tag = t.tag;
 
-/*
 INSERT INTO G19.tagged(userId, tagId, movieId, timestamp)
 SELECT T.userId, GS.tagId, T.movieId, T.timestamp
 FROM fcp_2022.tagged_csv T
-JOIN fcp_2022.`genome-scores_csv` GS ON T.movieId = GS.movieId; */
-
-INSERT INTO G19.tagged(userId, tagId, movieId, timestamp)
-SELECT T.userId, t2.tagId, T.movieId, T.timestamp
-FROM fcp_2022.tagged_csv T
-JOIN G19.tags as t2 ON t2.tag = T.tag;
-
+JOIN fcp_2022.`genome-scores_csv` GS ON T.movieId = GS.movieId;
 
 INSERT INTO G19.ratings(userId, movieId, rating, timestamp)     
 SELECT u.userId, m.movieId, r.rating, r.timestamp
