@@ -67,7 +67,10 @@ FROM fcp_2022.`genome-scores_csv`;  */
 
 # The tagID is set to AutoIncrement so we only need to select the distinct tag from the tagged csv
 INSERT INTO G19.tags (tag)
-SELECT DISTINCT(tag) FROM fcp_2022.tagged_csv;
+SELECT DISTINCT(tag) FROM
+	(SELECT tag from fcp_2022.tagged_csv as t
+	UNION
+	SELECT tag from `fcp_2022`.`genome-scores_csv` as g) as tags;
 
 /*
 This will split each genre field by '|', stack them into a column and insert into genres table with auto increment ID
