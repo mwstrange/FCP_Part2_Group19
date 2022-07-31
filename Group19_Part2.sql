@@ -87,13 +87,11 @@ UNION
 SELECT DISTINCT(genre7) FROM (SELECT Substring_Index(substring_index(genres, '|',7), '|', -1) as genre7 FROM fcp_2022.tagged_csv ) as split7) as split_genres;
 
 # Using a subquery to get each distinct user and then importing that into the table.
-INSERT INTO G19.users(birthdate, gender, zip, occupation)
-SELECT 
-	birthdate, gender, zip, occupation
-FROM 
-	(SELECT userId, birthdate, gender, zip, occupation
-	 FROM fcp_2022.ratings_csv
-     	 GROUP BY userId, birthdate, gender, zip, occupation) as users;
+INSERT INTO G19.users(UserId, birthdate, gender, zip, occupation)
+SELECT DISTINCT(userId), birthdate, gender, zip, occupation
+FROM fcp_2022.ratings_csv;
+
+--------------------------------------------
 
 # Using a subquery to get each distinct movie and then importing that into the table.
 INSERT INTO G19.movies(movieId, title, yearReleased, imdbid, tmdbid)
@@ -135,6 +133,8 @@ INSERT INTO G19.movie_genome (movieId, tagId, relevance)
 SELECT g.movieId, t.tagID, g.relevance
 FROM `fcp_2022`.`genome-scores_csv` as g
 JOIN G19.tags as t ON g.tag = t.tag;
+
+-----------------------------------------------------------
 
 INSERT INTO G19.tagged(userId, tagId, movieId, timestamp)
 SELECT T.userId, GS.tagId, T.movieId, T.timestamp
