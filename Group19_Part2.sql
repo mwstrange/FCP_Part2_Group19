@@ -136,12 +136,15 @@ SELECT
 FROM 
 	(SELECT userId, birthdate, gender, zip, occupation
 	 FROM fcp_2022.ratings_csv
-     GROUP BY userId, birthdate, gender, zip, occupation) as users;
+     	 GROUP BY userId, birthdate, gender, zip, occupation) as users;
 
-#Going to be the same issue here with movieId
-INSERT INTO G19.movies(movieId, title, yearReleased, imbId, tmbId)
-SELECT movieId, title, yearReleased, imdbId, tmdbId
-FROM  fcp_2022.ratings_csv;
+# Using a subquery to get each distinct movie and then importing that into the table.
+INSERT INTO G19.movies(title, yearReleased, imdbid, tmdbid)
+SELECT 
+	title, yearReleased, imdbId, tmdbId
+FROM  
+	(SELECT DISTINCT(movieId), title, yearReleased, imdbId, tmdbId
+	 FROM fcp_2022.ratings_csv) as movies;
 
 INSERT INTO G19.movie_genre(movieId, genreId)
 SELECT movieId, genreId
