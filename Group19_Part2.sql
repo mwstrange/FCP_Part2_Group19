@@ -150,10 +150,10 @@ JOIN G19.tags as t ON g.tag = t.tag;
 
 -----------------------------------------------------------
 
-INSERT INTO G19.tagged(userId, tagId, movieId, timestamp)
-SELECT T.userId, GS.tagId, T.movieId, T.timestamp
-FROM fcp_2022.tagged_csv T
-JOIN fcp_2022.`genome-scores_csv` GS ON T.movieId = GS.movieId;
+#INSERT INTO G19.tagged(userId, tagId, movieId, timestamp)
+#SELECT T.userId, GS.tagId, T.movieId, T.timestamp
+#FROM fcp_2022.tagged_csv T
+#JOIN fcp_2022.`genome-scores_csv` GS ON T.movieId = GS.movieId;
 
 #I think this way the tagId will pull from our new database and include everything from the union statement in the tags table
 INSERT INTO G19.tagged(userId, tagId, movieId, timestamp)
