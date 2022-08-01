@@ -94,10 +94,17 @@ FROM fcp_2022.ratings_csv;
 --------------------------------------------
 
 # Using a subquery to get each distinct movie and then importing that into the table.
-INSERT INTO G19.movies(movieId, title, yearReleased, imdbid, tmdbid)
-SELECT DISTINCT(movieId), title, yearReleased, imdbId, tmdbId
-FROM fcp_2022.ratings_csv;
+#INSERT INTO G19.movies(movieId, title, yearReleased, imdbid, tmdbid)
+#SELECT DISTINCT(movieId), title, yearReleased, imdbId, tmdbId
+#FROM fcp_2022.ratings_csv;
 
+INSERT INTO G19.movies
+	SELECT Distinct(movieId), title, yearReleased, imdbId, tmdbID
+	FROM fcp_2022.ratings_csv
+	UNION
+	SELECT Distinct(movieId), title, yearReleased, null as imdbId, null as tmdbID
+	FROM fcp_2022.`genome-scores_csv`
+	WHERE movieId NOT IN (SELECT DISTINCT(movieId) FROM fcp_2022.ratings_csv)
 ---------------------------------------------
 
 #each movie can have more than one genre so we split out to make sure we caught every genre for each movie in the tagged file. 
