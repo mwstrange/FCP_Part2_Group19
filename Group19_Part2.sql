@@ -61,12 +61,19 @@ CREATE TABLE G19.ratings(
 #IN ORDER OF DATABASE POPULATION-----------------------------------------------------------
 
 # The tagID is set to AutoIncrement so we only need to select the distinct tag from the tagged csv
-INSERT INTO G19.tags (tag)
-SELECT DISTINCT(tag) FROM
-	(SELECT tag from fcp_2022.tagged_csv as t
-	UNION
-	SELECT tag from `fcp_2022`.`genome-scores_csv` as g) as tags;
+#INSERT INTO G19.tags (tag)
+#SELECT DISTINCT(tag) FROM
+#	(SELECT tag from fcp_2022.tagged_csv as t
+#	UNION
+#	SELECT tag from `fcp_2022`.`genome-scores_csv` as g) as tags;
 
+/* Changed the tags to use the tagid that exists in the genome-table and then auto increment
+for the ones in the tags table*/
+INSERT INTO G19.tags (tag, tagId)
+	SELECT DISTINCT(tag), tagId from `fcp_2022`.`genome-scores_csv`
+	UNION
+	SELECT DISTINCT(tag), null as tagid from fcp_2022.tagged_csv
+	WHERE tag not in (SELECT DISTINCT(tag) from fcp_2022.`genome-scores_csv`);
 /*
 This will split each genre field by '|', stack them into a column and insert into genres table with auto increment ID
 */
