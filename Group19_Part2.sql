@@ -150,7 +150,7 @@ UNION
 
 /* If the tags are populated with the tagID in the genome file then we don't need a join to look up the tagid */
 INSERT INTO G19.movie_genome (movieId, tagId, relevance)
-SELECT movieId, tagId, relavance
+SELECT movieId, tagId, relevance
 FROM `fcp_2022`.`genome-scores_csv`
 -----------------------------------------------------------
 
