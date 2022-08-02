@@ -143,11 +143,15 @@ UNION
 
 -----------------------------------------------------------    
 
-INSERT INTO G19.movie_genome (movieId, tagId, relevance)
-SELECT g.movieId, t.tagID, g.relevance
-FROM `fcp_2022`.`genome-scores_csv` as g
-JOIN G19.tags as t ON g.tag = t.tag;
+#INSERT INTO G19.movie_genome (movieId, tagId, relevance)
+#SELECT g.movieId, t.tagID, g.relevance
+#FROM `fcp_2022`.`genome-scores_csv` as g
+#JOIN G19.tags as t ON g.tag = t.tag;
 
+/* If the tags are populated with the tagID in the genome file then we don't need a join to look up the tagid */
+INSERT INTO G19.movie_genome (movieId, tagId, relevance)
+SELECT movieId, tagId, relavance
+FROM `fcp_2022`.`genome-scores_csv`
 -----------------------------------------------------------
 
 #INSERT INTO G19.tagged(userId, tagId, movieId, timestamp)
