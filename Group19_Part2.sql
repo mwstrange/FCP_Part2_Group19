@@ -87,13 +87,6 @@ INSERT INTO G19.users_2(UserId, birthdate, gender, zip, occupation)
 SELECT DISTINCT(userId), birthdate, gender, zip, occupation
 FROM fcp_2022.ratings_csv;
 
---------------------------------------------
-
-# Using a subquery to get each distinct movie and then importing that into the table.
-#INSERT INTO G19.movies(movieId, title, yearReleased, imdbid, tmdbid)
-#SELECT DISTINCT(movieId), title, yearReleased, imdbId, tmdbId
-#FROM fcp_2022.ratings_csv;
-
 INSERT INTO G19.movies_2
 	SELECT Distinct(movieId), title, yearReleased, imdbId, tmdbID
 	FROM fcp_2022.ratings_csv
@@ -129,23 +122,12 @@ UNION
     FROM (SELECT Substring_Index(substring_index(genres, '|',7), '|', -1) as genre7, movieId FROM fcp_2022.tagged_csv ) as split7) as sg 
     JOIN G19.genres g ON sg.genre1 = g.genre;
 
------------------------------------------------------------    
-
-#INSERT INTO G19.movie_genome (movieId, tagId, relevance)
-#SELECT g.movieId, t.tagID, g.relevance
-#FROM `fcp_2022`.`genome-scores_csv` as g
-#JOIN G19.tags as t ON g.tag = t.tag;
 
 /* If the tags are populated with the tagID in the genome file then we don't need a join to look up the tagid */
 INSERT INTO G19.movie_genome_2 (movieId, tagId, relevance)
 SELECT movieId, tagId, relevance
 FROM `fcp_2022`.`genome-scores_csv`;
 
-
-#INSERT INTO G19.tagged(userId, tagId, movieId, timestamp)
-#SELECT T.userId, GS.tagId, T.movieId, T.timestamp
-#FROM fcp_2022.tagged_csv T
-#JOIN fcp_2022.`genome-scores_csv` GS ON T.movieId = GS.movieId;
 
 #I think this way the tagId will pull from our new database and include everything from the union statement in the tags table
 INSERT INTO G19.tagged_2 (userId, tagId, movieId, timestamp)
